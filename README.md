@@ -25,23 +25,42 @@ $ pip install flask-pytest
 Usage
 -----
 
+Add `app = FlaskPytest(app)` to your project:
+
 ```python
 from flask import Flask
 from flask.ext.pytest import FlaskPytest
 
 app = Flask(__name__)
-app = FlaskPytest(app)
+app.config.from_pyfile('settings.py')
 
-app.config['DEBUG'] = True
+app = FlaskPytest(app)  # <-- Add this line
 
-# ...
+@app.route('/')
+def hello():
+    return 'Hello World!'
 
 app.run()
 ```
 
-Your tests will now be run in the background whenever `DEBUG=True`. If a test
-fails, you'll hear a beep and see the output. Change a file to re-run them to
-see if you fixed the problem.
+##### settings.py
+
+```python
+DEBUG = True
+```
+
+Your tests will now be run in the background:
+
+```bash
+ * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+ * Restarting with reloader
+Running tests...
+...
+3 passed in 1.20 seconds
+```
+
+If a test fails, you'll hear a beep and see the output. Change a source file to
+reload the development server like normal, which will now re-run the tests.
 
 
 Contributing
