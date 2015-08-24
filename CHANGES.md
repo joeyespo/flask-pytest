@@ -2,6 +2,11 @@ Flask-pytest Changelog
 ======================
 
 
+#### Version 0.0.3 (2015-08-23)
+
+- Bugfix: Fix pytest requirement
+
+
 #### Version 0.0.2 (2015-08-23)
 
 - Enhancement: Add `FLASK_PYTEST_ENABLED` setting
