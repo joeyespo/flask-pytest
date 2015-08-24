@@ -9,9 +9,10 @@ Runs pytest in a background process when DEBUG is True.
 Motivation
 ----------
 
-Running tests shouldn't be something you have to remember to do. With this,
-Flask extension, tests be automatically be run for you and re-run when
-code changes.
+Running tests shouldn't be something you have to go out of your way to do. With
+this Flask extension, tests will be automatically be run for you, and re-run
+when code changes. It also beeps when there's an error and shows the results in
+the same terminal as your Flask output.
 
 
 Installation
