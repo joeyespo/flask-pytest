@@ -19,22 +19,30 @@ __version__ = '0.0.1'
 BEEP_CHARACTER = '\a'
 
 
-def call_then_log(full_run=False, verbose=False, extra_args=None):
+def bool_config(app, setting, default=None):
+    value = app.config.get(setting)
+    return (default
+            if value is None else
+            str(app.config.get(setting)).lower() == 'true')
+
+
+def call_then_log(beep=True, exitfirst=True, quiet=True, extra_args=None):
     argv = []
-    if not full_run:
+    if exitfirst:
         argv += ['--exitfirst']
-    if not verbose:
+    if quiet:
         argv += ['--quiet']
     argv += extra_args or []
 
     exit_code = pytest.main(argv)
-    if exit_code != 0:
+    if exit_code != 0 and beep:
         print(BEEP_CHARACTER, end='')
 
 
-def run_background_tests():
+def start_tests(beep=True, exitfirst=True, quiet=True, extra_args=None):
     print('Running tests...')
-    thread = Thread(target=call_then_log, name='background-pytest')
+    thread = Thread(target=call_then_log, name='background-pytest', args=(
+        beep, exitfirst, quiet, extra_args))
     thread.daemon = True
     thread.start()
 
@@ -43,12 +51,13 @@ def FlaskPytest(app, extra_args=None):
     inner_run = app.run
 
     def run_app(*args, **kwargs):
-        run = str(app.config.get('FLASK_RUN_TESTS', True)).lower() == 'true'
-        if (app.debug and run and os.environ.get('WERKZEUG_RUN_MAIN')):
-            run_background_tests()
-
-        result = inner_run(*args, **kwargs)
-        return result
+        if (app.debug and os.environ.get('WERKZEUG_RUN_MAIN') and
+                bool_config(app, 'FLASK_PYTEST_ENABLED', True)):
+            start_tests(
+                beep=bool_config(app, 'FLASK_PYTEST_BEEP', True),
+                exitfirst=bool_config(app, 'FLASK_PYTEST_EXITFIRST', True),
+                quiet=bool_config(app, 'FLASK_PYTEST_QUIET', True))
+        return inner_run(*args, **kwargs)
 
     # Override the built-in run method and return the app
     app.run = run_app
