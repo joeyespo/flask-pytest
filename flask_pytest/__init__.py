@@ -40,6 +40,7 @@ def call_then_log(beep=True, exitfirst=True, quiet=True, extra_args=None):
 
 
 def start_tests(beep=True, exitfirst=True, quiet=True, extra_args=None):
+    # TODO: Use multiprocessing
     print('Running tests...')
     thread = Thread(target=call_then_log, name='background-pytest', args=(
         beep, exitfirst, quiet, extra_args))
