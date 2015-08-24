@@ -1,1 +1,3 @@
 DEBUG = True
+
+FLASK_PYTEST_QUIET = False
