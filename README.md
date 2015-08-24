@@ -63,6 +63,24 @@ If a test fails, you'll hear a beep and see the output. Change a source file to
 reload the development server like normal, which will now re-run the tests.
 
 
+Configuration
+-------------
+
+Flask-pytest runs out-of-the-box without any config. However, you may want to
+tweak the behavior here and there. Here's a list of available settings you can
+add to your `app.config`:
+
+- `FLASK_PYTEST_ENABLED`: Set to `True` to run tests regardless of `DEBUG`, or
+  to `False` to disable the extension entirely. If `None`, the extension will
+  run when `DEBUG` is `True`. Default: `None`
+
+- `FLASK_PYTEST_BEEP`: Beep when pytest returns a non-zero exit code. Default: `True`
+
+- `FLASK_PYTEST_EXITFIRST`: Stops running tests if a test fails. Default: `True`
+
+- `FLASK_PYTEST_QUIET`: Runs pytest in quiet mode. Default: `True`
+
+
 Contributing
 ------------
 
