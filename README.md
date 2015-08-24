@@ -3,7 +3,7 @@ Flask-pytest
 
 [![Current version on PyPI](http://img.shields.io/pypi/v/flask-pytest.svg)](http://pypi.python.org/pypi/flask-pytest)
 
-Runs pytest in a background process when DEBUG is True.
+Runs pytest in a background process when `DEBUG` is `True`.
 
 
 Motivation
