@@ -26,38 +26,40 @@ def bool_config(app, setting, default=None):
             str(app.config.get(setting)).lower() == 'true')
 
 
-def call_then_log(beep=True, exitfirst=True, quiet=True, extra_args=None):
+def run_tests_sync(beep=True, exitfirst=True, quiet=True, *extra_args):
     argv = []
     if exitfirst:
         argv += ['--exitfirst']
     if quiet:
         argv += ['--quiet']
-    argv += extra_args or []
+    if extra_args:
+        argv += extra_args
 
     exit_code = pytest.main(argv)
     if exit_code != 0 and beep:
         print(BEEP_CHARACTER, end='')
 
 
-def start_tests(beep=True, exitfirst=True, quiet=True, extra_args=None):
+def start_tests(beep=True, exitfirst=True, quiet=True, *extra_args):
     # TODO: Use multiprocessing
     print('Running tests...')
-    thread = Thread(target=call_then_log, name='background-pytest', args=(
-        beep, exitfirst, quiet, extra_args))
+    thread = Thread(target=run_tests_sync, name='background-pytest',
+                    args=(beep, exitfirst, quiet) + extra_args)
     thread.daemon = True
     thread.start()
 
 
-def FlaskPytest(app, extra_args=None):
+def FlaskPytest(app, *extra_args):
     inner_run = app.run
 
     def run_app(*args, **kwargs):
         if (app.debug and os.environ.get('WERKZEUG_RUN_MAIN') and
                 bool_config(app, 'FLASK_PYTEST_ENABLED', True)):
             start_tests(
-                beep=bool_config(app, 'FLASK_PYTEST_BEEP', True),
-                exitfirst=bool_config(app, 'FLASK_PYTEST_EXITFIRST', True),
-                quiet=bool_config(app, 'FLASK_PYTEST_QUIET', True))
+                bool_config(app, 'FLASK_PYTEST_BEEP', True),
+                bool_config(app, 'FLASK_PYTEST_EXITFIRST', True),
+                bool_config(app, 'FLASK_PYTEST_QUIET', True),
+                *extra_args)
         return inner_run(*args, **kwargs)
 
     # Override the built-in run method and return the app
