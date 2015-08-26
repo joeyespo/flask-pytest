@@ -23,7 +23,7 @@ def read(fname):
 
 setup(
     name='flask-pytest',
-    version='0.0.3',
+    version='0.0.4',
     description='Runs pytest in a background process when DEBUG is True.',
     long_description=__doc__,
     author='Joe Esposito',

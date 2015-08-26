@@ -2,6 +2,12 @@ Flask-pytest Changelog
 ======================
 
 
+#### Version 0.0.4 (2015-08-25)
+
+- Breaking change: Make `extra_args` an arg list
+- Bugfix: Wire-up `extra_args`
+
+
 #### Version 0.0.3 (2015-08-23)
 
 - Bugfix: Fix pytest requirement
