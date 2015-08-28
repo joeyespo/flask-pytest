@@ -11,7 +11,6 @@ import os
 from multiprocessing import Process
 
 import pytest
-from termcolor import colored
 
 __version__ = '0.0.4'
 
