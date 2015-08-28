@@ -13,7 +13,7 @@ from threading import Thread
 import pytest
 from termcolor import colored
 
-__version__ = '0.0.3'
+__version__ = '0.0.4'
 
 
 BEEP_CHARACTER = '\a'
