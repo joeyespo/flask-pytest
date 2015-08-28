@@ -8,7 +8,7 @@ Runs pytest in a background process when DEBUG is True.
 from __future__ import print_function
 
 import os
-from threading import Thread
+from multiprocessing import Process
 
 import pytest
 from termcolor import colored
@@ -41,12 +41,11 @@ def run_tests_sync(beep=True, exitfirst=True, quiet=True, *extra_args):
 
 
 def start_tests(beep=True, exitfirst=True, quiet=True, *extra_args):
-    # TODO: Use multiprocessing
     print('Running tests...')
-    thread = Thread(target=run_tests_sync, name='background-pytest',
-                    args=(beep, exitfirst, quiet) + extra_args)
-    thread.daemon = True
-    thread.start()
+    p = Process(target=run_tests_sync, name='background-pytest',
+                args=(beep, exitfirst, quiet) + extra_args)
+    p.daemon = True
+    p.start()
 
 
 def FlaskPytest(app, *extra_args):
